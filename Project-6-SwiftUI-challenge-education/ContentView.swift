@@ -24,31 +24,30 @@ struct ContentView: View {
                 }
                 .pickerStyle(.segmented)
             }
-            
             Section {
                 Picker("Select multiplication table", selection: $selectedTable) {
                     ForEach(2..<13, id: \.self){
                         Text("\($0)")
                     }
                 }
-                .pickerStyle(.inline)
+                .pickerStyle(.menu)
             }
-            
             Section {
                 HStack {
                     Spacer()
                     Button("Start"){
                         
                     }
-                    .background(.indigo)
-                    .foregroundStyle(.white)
+                    .foregroundStyle(.black)
                     .padding()
                     Spacer()
                 }
             }
         }
-        
     }
+    
+    
+    
 }
 
 #Preview {
