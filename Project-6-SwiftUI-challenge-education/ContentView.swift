@@ -16,6 +16,7 @@ struct ContentView: View {
     @State private var multiplyByList = Array(2...25)
     @State private var correctAnswers = 0
     @State private var options: [Int] = [Int]()
+    @State private var numberOfQuestions = 0
 
     
     var body: some View {
@@ -76,7 +77,7 @@ struct ContentView: View {
                 HStack {
                     ForEach(options, id: \.self){ num in
                         Button {
-                            print(num)
+                            validateSelectedOption(num)
                         } label: {
                             Text("\(num)")
                         }
@@ -108,14 +109,34 @@ struct ContentView: View {
     
     func startGame() {
         multiplyByList.shuffle()
-        multiplyBy = multiplyByList[0]
+        multiplyBy = multiplyByList[numberOfQuestions]
         correctAnswers = selectedTable * multiplyBy
-        
+        numberOfQuestions = 0
+        generateOptions()
+    }
+    
+    func validateSelectedOption(_ selected: Int) {
+        if correctAnswers == selected {
+            print("correct")
+        } else {
+            print("fail")
+        }
+        askQuestion()
+    }
+    
+    func askQuestion(){
+        numberOfQuestions += 1
+        multiplyBy = multiplyByList[numberOfQuestions]
+        correctAnswers = selectedTable * multiplyBy
+        generateOptions()
+    }
+    
+    func generateOptions() {
+        options = []
         options.append(correctAnswers)
         options.append(correctAnswers - 1)
         options.append(correctAnswers + 2)
         options.append(correctAnswers - 2)
-        
         options.shuffle()
     }
     
