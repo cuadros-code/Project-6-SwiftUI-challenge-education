@@ -17,7 +17,9 @@ struct ContentView: View {
     @State private var correctAnswers = 0
     @State private var options: [Int] = [Int]()
     @State private var numberOfQuestions = 0
-
+    
+    @State private var showCorrectIcon = false
+    @State private var showErrorIcon = false
     
     var body: some View {
         NavigationStack {
@@ -92,10 +94,34 @@ struct ContentView: View {
                         )
                     }
                 }
+               
+            }
+            .overlay {
+                HStack {
+                    Spacer()
+                    Image("check")
+                        .resizable()
+                        .frame(width: 300, height: 300)
+                        .opacity(showCorrectIcon ? 1 : 0)
+                        .offset(x: 0, y: showCorrectIcon ? -100 : 400)
+                        .animation(.easeInOut(duration: 0.5), value: showCorrectIcon)
+                    
+                    Spacer()
+                }
                 
+                HStack {
+                    Spacer()
+                    Image("cancel")
+                        .resizable()
+                        .frame(width: 300, height: 300)
+                        .opacity(showErrorIcon ? 1 : 0)
+                        .offset(x: 0, y: showErrorIcon ? -100 : 400)
+                        .animation(.easeInOut(duration: 0.5), value: showErrorIcon)
+                    
+                    Spacer()
+                }
             }
             Spacer()
-            
             .toolbar {
                 Button("Start",action: startGame)
             }
@@ -116,12 +142,20 @@ struct ContentView: View {
     }
     
     func validateSelectedOption(_ selected: Int) {
+       
         if correctAnswers == selected {
-            print("correct")
+            showCorrectIcon = true
         } else {
-            print("fail")
+            showErrorIcon = true
         }
-        askQuestion()
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+            showCorrectIcon = false
+            showErrorIcon   = false
+            withAnimation {
+                askQuestion()
+            }
+        }
     }
     
     func askQuestion(){
