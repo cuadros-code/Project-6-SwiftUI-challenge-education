@@ -11,8 +11,12 @@ struct ContentView: View {
     
     @State private var selectedTable = 2
     @State private var selectedNumberOfQuestions = 5
-    
+    @State private var multiplyBy = 0
     @State private var showQuestions = false
+    @State private var multiplyByList = Array(2...25)
+    @State private var correctAnswers = 0
+    @State private var options: [Int] = [Int]()
+
     
     var body: some View {
         NavigationStack {
@@ -64,22 +68,56 @@ struct ContentView: View {
             VStack {
                 
                 HStack {
-                    Text("2 X 2")
+                    Text("\(selectedTable) X \(multiplyBy)")
                         .font(.system(size: 95))
                         .fontWeight(.heavy)
+                }
+                
+                HStack {
+                    ForEach(options, id: \.self){ num in
+                        Button {
+                            print(num)
+                        } label: {
+                            Text("\(num)")
+                        }
+                        .frame(width: 80, height: 80)
+                        .buttonBorderShape(.capsule)
+                        .font(.system(size: 34))
+                        .background(
+                            RoundedRectangle(
+                                cornerRadius: 20,
+                                style: .continuous
+                            ).fill(Color(white: 0.8, opacity: 0.7))
+                        )
+                    }
                 }
                 
             }
             Spacer()
             
             .toolbar {
-                Button("Start"){
-                    
-                }
+                Button("Start",action: startGame)
             }
+        }
+        
+        .onAppear {
+            startGame()
         }
     }
     
+    
+    func startGame() {
+        multiplyByList.shuffle()
+        multiplyBy = multiplyByList[0]
+        correctAnswers = selectedTable * multiplyBy
+        
+        options.append(correctAnswers)
+        options.append(correctAnswers - 1)
+        options.append(correctAnswers + 2)
+        options.append(correctAnswers - 2)
+        
+        options.shuffle()
+    }
     
     
     
