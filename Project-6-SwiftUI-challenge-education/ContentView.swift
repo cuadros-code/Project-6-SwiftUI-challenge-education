@@ -21,6 +21,8 @@ struct ContentView: View {
     @State private var showCorrectIcon = false
     @State private var showErrorIcon = false
     
+    @State private var showAlertEndGame = false
+    
     var body: some View {
         NavigationStack {
             
@@ -127,6 +129,10 @@ struct ContentView: View {
             }
         }
         
+        .alert("End Game", isPresented: $showAlertEndGame) {
+            
+        }
+        
         .onAppear {
             startGame()
         }
@@ -163,6 +169,10 @@ struct ContentView: View {
         multiplyBy = multiplyByList[numberOfQuestions]
         correctAnswers = selectedTable * multiplyBy
         generateOptions()
+        
+        if selectedNumberOfQuestions == numberOfQuestions {
+            showAlertEndGame = true
+        }
     }
     
     func generateOptions() {
