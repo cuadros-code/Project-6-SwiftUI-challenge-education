@@ -17,6 +17,7 @@ struct ContentView: View {
     @State private var correctAnswers = 0
     @State private var options: [Int] = [Int]()
     @State private var numberOfQuestions = 0
+    @State private var totalCorrectAnswers = 0
     
     @State private var showCorrectIcon = false
     @State private var showErrorIcon = false
@@ -130,7 +131,11 @@ struct ContentView: View {
         }
         
         .alert("End Game", isPresented: $showAlertEndGame) {
-            
+            Button("Ok", action: startGame)
+        } message: {
+            Text(
+                "Correct: \(totalCorrectAnswers) \n Incorrect: \(selectedNumberOfQuestions - totalCorrectAnswers)"
+            )
         }
         
         .onAppear {
@@ -151,6 +156,7 @@ struct ContentView: View {
        
         if correctAnswers == selected {
             showCorrectIcon = true
+            totalCorrectAnswers += 1
         } else {
             showErrorIcon = true
         }
